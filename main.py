@@ -22,7 +22,7 @@ if __name__ == "__main__":
     for v in range(HEIGHT):
         for u in range(WIDTH):
 
-            uv_vp = np.array([VIEWPORT_WIDTH, VIEWPORT_HEIGHT])/np.array([u/WIDTH, v/WIDTH])
+            uv_vp = np.array([VIEWPORT_WIDTH, VIEWPORT_HEIGHT])*np.array([u/WIDTH, v/WIDTH])
             vp_coord = np.array([uv_vp[0], uv_vp[1], 0]) - [VIEWPORT_WIDTH/2, VIEWPORT_HEIGHT, -FOCAL_LENGTH]
 
             image[v][u]=[(uv_vp[0]/VIEWPORT_WIDTH)*255, (uv_vp[1]/VIEWPORT_HEIGHT)*255, 0]
