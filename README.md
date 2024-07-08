@@ -1,7 +1,7 @@
 # Simple Tracer V2
 This is a remake of one of my older ray tracer projects, only difference is that it is this time written in python instead of C++  
 
-![output](output.jpeg)
+![output](output.jpg)
 
 This time however I am planning on actually finishing this and having it fully working :P  
 
