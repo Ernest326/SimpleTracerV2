@@ -24,3 +24,26 @@ def display_image(image):
 def save_image(image):
     img = Image.fromarray(image)
     img.save("output.jpg")
+
+
+def length(arr):
+    mag=0
+    for i in arr:
+        mag+=i*i
+    mag=np.sqrt(mag)
+    return mag
+
+
+def normalize(arr):
+    return arr/length(arr)
+
+
+def dot(x, y):
+    if(len(x)==len(y)):
+        result=0
+        for i in range(len(x)):
+            result+=x[i]*y[i]
+        return result
+    else:
+        print(f"Incompatible dot product between {x} and {y}!")
+        return None
