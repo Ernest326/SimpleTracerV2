@@ -19,7 +19,7 @@ LIGHT_BOUNCES = 15
 
 image = utils.gradient(WIDTH, HEIGHT, [255, 255, 255], [100, 100, 180])
 
-sphere = Sphere((0,0,1), 0.5)
+sphere = Sphere((0,0,-1), 0.5)
 
 if __name__ == "__main__":
 
@@ -27,7 +27,7 @@ if __name__ == "__main__":
 
     du = VIEWPORT_WIDTH/WIDTH
     dv = VIEWPORT_HEIGHT/HEIGHT
-    top_left = np.array([-VIEWPORT_WIDTH/2, VIEWPORT_HEIGHT/2, FOCAL_LENGTH])
+    top_left = np.array([-VIEWPORT_WIDTH/2, -VIEWPORT_HEIGHT/2, FOCAL_LENGTH])
     print(top_left)
     pixel_mid_offset = np.array([du/2, -dv/2, 0])
 
@@ -39,7 +39,8 @@ if __name__ == "__main__":
                 print(f"Progress: {v*WIDTH+u}/{WIDTH*HEIGHT}\t[{((v*WIDTH+u)/(WIDTH*HEIGHT))*100:.2f}]")
 
             pixel_coord = top_left + np.array([u*du,v*dv,0]) + pixel_mid_offset
-            ray_dir = utils.normalize(pixel_coord-CAMERA_ORIGIN)
+            ray_dir = pixel_coord-CAMERA_ORIGIN #It doesnt matter whether direction is normalized or not
+            #ray_dir = utils.normalize(pixel_coord-CAMERA_ORIGIN)
 
             ray = Ray(CAMERA_ORIGIN, ray_dir)
 
