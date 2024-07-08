@@ -34,6 +34,13 @@ def length(arr):
     return mag
 
 
+def length_sqr(arr):
+    mag=0
+    for i in arr:
+        mag+=i*i
+    return mag
+
+
 def normalize(arr):
     return arr/length(arr)
 

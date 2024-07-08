@@ -8,3 +8,6 @@ class Ray:
 
     def magnitude(self):
         return np.sqrt(self.direction.dot(self.direction))
+    
+    def at(self, t):
+        return self.origin + self.direction*t

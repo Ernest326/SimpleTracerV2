@@ -6,7 +6,7 @@ import time
 
 WIDTH = 400
 ASPECT_RATIO = 16.0/9.0
-HEIGHT = int(WIDTH/ASPECT_RATIO)
+HEIGHT = max(1,int(WIDTH/ASPECT_RATIO))
 
 CAMERA_ORIGIN = np.array([0, 0, 0])
 FOCAL_LENGTH = 1
@@ -19,7 +19,7 @@ LIGHT_BOUNCES = 15
 
 image = utils.gradient(WIDTH, HEIGHT, [255, 255, 255], [100, 100, 180])
 
-sphere = Sphere((0,0,-1), 0.5)
+sphere = Sphere((0,0,1), 0.5)
 
 if __name__ == "__main__":
 
@@ -28,8 +28,8 @@ if __name__ == "__main__":
     du = VIEWPORT_WIDTH/WIDTH
     dv = VIEWPORT_HEIGHT/HEIGHT
     top_left = np.array([-VIEWPORT_WIDTH/2, -VIEWPORT_HEIGHT/2, FOCAL_LENGTH])
+    pixel0 = top_left + 0.5*np.array((du, dv, 0))
     print(top_left)
-    pixel_mid_offset = np.array([du/2, -dv/2, 0])
 
     for v in range(HEIGHT):
         for u in range(WIDTH):
@@ -38,14 +38,16 @@ if __name__ == "__main__":
             if(v*WIDTH+u)%20==0:
                 print(f"Progress: {v*WIDTH+u}/{WIDTH*HEIGHT}\t[{((v*WIDTH+u)/(WIDTH*HEIGHT))*100:.2f}]")
 
-            pixel_coord = top_left + np.array([u*du,v*dv,0]) + pixel_mid_offset
+            pixel_coord = pixel0 + np.array([u*du,v*dv,0])
             ray_dir = pixel_coord-CAMERA_ORIGIN #It doesnt matter whether direction is normalized or not
             #ray_dir = utils.normalize(pixel_coord-CAMERA_ORIGIN)
 
             ray = Ray(CAMERA_ORIGIN, ray_dir)
 
-            if(sphere.hit(ray)):
-                image[v][u]=(255, 0, 0)
+            hit = sphere.hit(ray)
+            if (hit != None):
+                image[v][u]=np.array((hit.normal[0]+1, hit.normal[1]+1, hit.normal[2]+1))*0.5*255
+
             
             #print(utils.normalize(vp_coord))
     print(f"COMPLETE!!!\tTime Taken: {time.time()-start_time:.2f} seconds")
