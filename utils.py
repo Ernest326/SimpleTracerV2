@@ -44,6 +44,12 @@ def length_sqr(arr):
 def normalize(arr):
     return arr/length(arr)
 
+def dot(x):
+    result=0
+    for i in range(len(x)):
+        result+=x[i]
+    return result
+
 
 def dot(x, y):
     if(len(x)==len(y)):

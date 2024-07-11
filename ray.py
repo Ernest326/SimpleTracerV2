@@ -1,4 +1,5 @@
 import numpy as np
+import utils
 
 class Ray:
 
@@ -7,7 +8,7 @@ class Ray:
         self.direction = direction
 
     def magnitude(self):
-        return np.sqrt(self.direction.dot(self.direction))
+        return np.sqrt(utils.dot(self.direction))
     
     def at(self, t):
         return self.origin + self.direction*t

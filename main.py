@@ -29,25 +29,23 @@ if __name__ == "__main__":
     dv = VIEWPORT_HEIGHT/HEIGHT
     top_left = np.array([-VIEWPORT_WIDTH/2, -VIEWPORT_HEIGHT/2, FOCAL_LENGTH])
     pixel0 = top_left + 0.5*np.array((du, dv, 0))
-    print(top_left)
 
     for v in range(HEIGHT):
         for u in range(WIDTH):
 
             #Every n pixels output progress
             if(v*WIDTH+u)%20==0:
-                print(f"Progress: {v*WIDTH+u}/{WIDTH*HEIGHT}\t[{((v*WIDTH+u)/(WIDTH*HEIGHT))*100:.2f}]")
+               print(f"Progress: {v*WIDTH+u}/{WIDTH*HEIGHT}\t[{((v*WIDTH+u)/(WIDTH*HEIGHT))*100:.2f}]")
 
             pixel_coord = pixel0 + np.array([u*du,v*dv,0])
             ray_dir = pixel_coord-CAMERA_ORIGIN #It doesnt matter whether direction is normalized or not
             #ray_dir = utils.normalize(pixel_coord-CAMERA_ORIGIN)
 
             ray = Ray(CAMERA_ORIGIN, ray_dir)
-
             hit = sphere.hit(ray)
+
             if (hit != None):
                 image[v][u]=np.array((hit.normal[0]+1, hit.normal[1]+1, hit.normal[2]+1))*0.5*255
-
             
             #print(utils.normalize(vp_coord))
     print(f"COMPLETE!!!\tTime Taken: {time.time()-start_time:.2f} seconds")

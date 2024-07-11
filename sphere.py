@@ -11,8 +11,8 @@ class Sphere(Hittable):
         super()
 
     #This calculation is derived from the intersection of the equation of the sphere and the equation of a line in 3D in parametric form
-    #The calculations are then further simplified to give us this monstrosity
-    def hit(self, ray: Ray):
+    #The calculations are then further simplified(b=-2h) to give us this monstrosity
+    def hit(self, ray: Ray, t_min=0, t_max=100000):
 
         #-b formula bullshit
         oc = self.origin - ray.origin
@@ -23,13 +23,25 @@ class Sphere(Hittable):
         #Discriminant checks if there is at least one valid solution
         discriminant = h*h - a*c
 
-        #P=Q+td, here we are getting t, the variable for distance along direction
-        t = (h-np.sqrt(discriminant) ) / a;
-        
-        #If we dont hit or object is behind us
-        if discriminant<0 or t<0:
+        if discriminant < 0:
             return None
-        else:
-            point = ray.at(t)
-            normal = utils.normalize(self.origin - point)
-            return HitResult(point, normal)
+        
+        sqrtd = np.sqrt(discriminant)
+        
+        #P=Q+td, here we are getting t, the variable for distance along direction, quadratic formula where -2b=h and discrinimant = b^2-4ac
+        root = (h-sqrtd)/a
+        if root<=t_min or root>=t_max:
+            root = (h+sqrtd)/a
+            if root<=t_min or root>=t_max:
+                return None
+
+        point = ray.at(root)
+
+        normal = (point-self.origin)/self.radius #Fancy way of normalising without vector length calculation
+        front_face = True
+
+        if utils.dot(ray.direction, normal)>0:
+            normal = -normal
+            front_face = False
+        
+        return HitResult(point, normal, root, front_face)

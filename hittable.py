@@ -2,10 +2,11 @@ from ray import Ray
 
 class HitResult:
 
-    def __init__(self, point, normal=(0,0,0), color=(0,0,0)):
+    def __init__(self, point, normal=(0,0,0), t=0, front_face=True):
         self.point = point
         self.normal = normal
-        self.color = color
+        self.t=t
+        self.front_face = front_face
 
 
 class Hittable:
