@@ -19,7 +19,7 @@ LIGHT_BOUNCES = 15
 
 image = utils.gradient(WIDTH, HEIGHT, [255, 255, 255], [100, 100, 180])
 
-sphere = Sphere((0,0,1), 0.5)
+sphere = Sphere((0,0,-1), 0.5)
 
 if __name__ == "__main__":
 
@@ -27,7 +27,7 @@ if __name__ == "__main__":
 
     du = VIEWPORT_WIDTH/WIDTH
     dv = VIEWPORT_HEIGHT/HEIGHT
-    top_left = np.array([-VIEWPORT_WIDTH/2, -VIEWPORT_HEIGHT/2, FOCAL_LENGTH])
+    top_left = np.array([-VIEWPORT_WIDTH/2, -VIEWPORT_HEIGHT/2, -FOCAL_LENGTH])
     pixel0 = top_left + 0.5*np.array((du, dv, 0))
 
     for v in range(HEIGHT):
