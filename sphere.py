@@ -2,6 +2,7 @@ from hittable import Hittable, HitResult
 from ray import Ray
 import numpy as np
 import utils
+from interval import interval
 
 class Sphere(Hittable):
 
@@ -12,7 +13,7 @@ class Sphere(Hittable):
 
     #This calculation is derived from the intersection of the equation of the sphere and the equation of a line in 3D in parametric form
     #The calculations are then further simplified(b=-2h) to give us this monstrosity
-    def hit(self, ray: Ray, t_min=0, t_max=100000):
+    def hit(self, ray: Ray, ray_t=interval()):
 
         #-b formula bullshit
         oc = self.origin - ray.origin
@@ -27,12 +28,12 @@ class Sphere(Hittable):
             return None
         
         sqrtd = np.sqrt(discriminant)
-        
+
         #P=Q+td, here we are getting t, the variable for distance along direction, quadratic formula where -2b=h and discrinimant = b^2-4ac
         root = (h-sqrtd)/a
-        if root<=t_min or root>=t_max:
+        if not ray_t.surrounds(root):
             root = (h+sqrtd)/a
-            if root<=t_min or root>=t_max:
+            if not ray_t.surrounds(root):
                 return None
 
         point = ray.at(root)

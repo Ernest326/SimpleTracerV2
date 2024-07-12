@@ -4,6 +4,7 @@ import numpy as np
 from sphere import Sphere
 from hittable import HittableList, HitResult
 import time
+from interval import interval
 
 WIDTH = 400
 ASPECT_RATIO = 16.0/9.0
@@ -29,7 +30,7 @@ world.add(sphere2)
 
 def ray_color(ray, world):
 
-    hit= world.hit(ray)
+    hit= world.hit(ray, interval(0, np.inf))
 
     if hit!=None:
         return np.array((hit.normal[0]+1, hit.normal[1]+1, hit.normal[2]+1))*0.5*255

@@ -1,4 +1,5 @@
 from ray import Ray
+from interval import interval
 
 class HitResult:
 
@@ -14,7 +15,7 @@ class Hittable:
     def __init__(self, origin):
         self.origin = origin
 
-    def hit(self, ray: Ray) -> HitResult:
+    def hit(self, ray: Ray, ray_t=interval()) -> HitResult:
         return None
     
 
@@ -23,13 +24,13 @@ class HittableList:
     def __init__(self, objects=[]):
         self.objects=objects
 
-    def hit(self, ray: Ray, t_min=0, t_max=100000) -> HitResult:
+    def hit(self, ray: Ray, ray_t=interval()) -> HitResult:
 
-        closest = t_max
+        closest = ray_t.max
         hit_result = None
 
         for object in self.objects:
-            hit = object.hit(ray, t_min, closest)
+            hit = object.hit(ray, interval(ray_t.min, closest))
 
             if hit!=None:
                 closest = hit.t
