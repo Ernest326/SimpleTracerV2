@@ -3,13 +3,14 @@ from ray import Ray
 from hittable import HittableList
 from interval import interval
 import utils
+import random
 
 class Camera:
 
     def __init__(self, position=np.array((0,0,0)), rotation=np.array((0,0,0))):
 
         #Quality Settings
-        self.samples = 200
+        self.samples = 100
         self.max_bounces = 10
 
         self.near = 0
@@ -64,8 +65,11 @@ class Camera:
                 ray_dir = pixel_coord-self.position #It doesnt matter whether direction is normalized or not
                 #ray_dir = utils.normalize(pixel_coord-CAMERA_ORIGIN)
 
-                ray = Ray(self.position, ray_dir)
-                color = self.ray_color(ray, world)
+                color = (0,0,0)
+
+                for i in range(self.samples):
+                    ray = Ray(self.position, ray_dir+np.array((0.005*(random.random()-0.5)*2, 0.005*(random.random()-0.5)*2, 0.005*(random.random()-0.5)*2)))
+                    color += self.ray_color(ray, world)/self.samples
 
                 image[v][u]=color
 
