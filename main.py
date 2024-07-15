@@ -1,10 +1,7 @@
-from ray import Ray
-import utils
-import numpy as np
-from sphere import Sphere
-from hittable import HittableList, HitResult
 import time
-from interval import interval
+import utils
+from sphere import Sphere
+from hittable import HittableList
 from camera import Camera
 
 sphere = Sphere((0,0,-1), 0.5)

@@ -1,6 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 from PIL import Image
+import random
 
 def gradient(w, h, c1, c2):
 
@@ -60,3 +61,21 @@ def dot(x, y):
     else:
         print(f"Incompatible dot product between {x} and {y}!")
         return None
+
+
+def random_unit_circle():
+    while True:
+        res = np.array((random.random()-0.5, random.random()-0.5))
+        if length_sqr(res)<1:
+            return res
+        
+
+def random_unit_sphere():
+    while True:
+        res = np.array(random.random()-0.5, random.random()-0.5, random.random()-0.5)
+        if length_sqr(res)<1:
+            return res
+
+
+def random_unit_square():
+    return np.array((random.random()-0.5, random.random()-0.5))

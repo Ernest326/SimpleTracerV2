@@ -62,13 +62,15 @@ class Camera:
                     print(f"Progress: {v*self.image_width+u}/{self.image_width*self.image_height}\t[{((v*self.image_width+u)/(self.image_width*self.image_height))*100:.2f}]")
 
                 pixel_coord = pixel0 + np.array([u*du,v*dv,0])
-                ray_dir = pixel_coord-self.position #It doesnt matter whether direction is normalized or not
                 #ray_dir = utils.normalize(pixel_coord-CAMERA_ORIGIN)
 
                 color = (0,0,0)
 
                 for i in range(self.samples):
-                    ray = Ray(self.position, ray_dir+np.array((0.005*(random.random()-0.5)*2, 0.005*(random.random()-0.5)*2, 0.005*(random.random()-0.5)*2)))
+                    offset = utils.random_unit_square()
+                    offset = np.array((offset[0]*du, offset[1]*dv, 0))
+                    ray_dir = pixel_coord+offset-self.position #It doesnt matter whether direction is normalized or not
+                    ray = Ray(self.position, ray_dir)
                     color += self.ray_color(ray, world)/self.samples
 
                 image[v][u]=color
