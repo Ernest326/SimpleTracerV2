@@ -72,9 +72,21 @@ def random_unit_circle():
 
 def random_unit_sphere():
     while True:
-        res = np.array(random.random()-0.5, random.random()-0.5, random.random()-0.5)
+        res = np.array((random.random()-0.5, random.random()-0.5, random.random()-0.5))
         if length_sqr(res)<1:
             return res
+
+
+def random_unit_sphere_dir():
+    return normalize(random_unit_sphere())
+
+
+def random_on_hemisphere(normal):
+    dir=random_unit_sphere_dir()
+    if(dot(dir, normal))>0:
+        return dir
+    else:
+        return -dir
 
 
 def random_unit_square():

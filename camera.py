@@ -13,14 +13,14 @@ class Camera:
         self.samples = 100
         self.max_bounces = 10
 
-        self.near = 0
+        self.near = 0.0000001
         self.far = np.inf
 
         #Image Settings
         self.focal_length = 1.0
 
         self.aspect_ratio = 16/9
-        self.image_width = 400
+        self.image_width = 300
         self.image_height = int(self.image_width/self.aspect_ratio)
 
         self.viewport_height = 2.0
@@ -33,12 +33,17 @@ class Camera:
         self.show_progress = True
 
 
-    def ray_color(self, ray, world: HittableList):
+    def ray_color(self, ray, world: HittableList, bounce=1):
 
         hit= world.hit(ray, interval(self.near, self.far))
 
         if hit!=None:
-            return np.array((hit.normal[0]+1, hit.normal[1]+1, hit.normal[2]+1))*0.5*255
+
+            if(bounce<self.max_bounces):
+                reflect = Ray(hit.point, utils.random_on_hemisphere(hit.normal))
+                return 0.5*self.ray_color(reflect, world, bounce+1)
+            else:
+                return np.array((255, 255, 255))
         else:
             a = (utils.normalize(ray.direction)[1]+1)*0.5
             return (1-a)*np.array((255, 255, 255)) + a*np.array((80, 80, 150))
