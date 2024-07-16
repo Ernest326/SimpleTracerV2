@@ -4,14 +4,15 @@ from hittable import HittableList
 from interval import interval
 import utils
 import random
+import matplotlib.pyplot as plt
 
 class Camera:
 
     def __init__(self, position=np.array((0,0,0)), rotation=np.array((0,0,0))):
 
         #Quality Settings
-        self.samples = 100
-        self.max_bounces = 10
+        self.samples = 20
+        self.max_bounces = 20
 
         self.near = 0.0000001
         self.far = np.inf
@@ -38,15 +39,15 @@ class Camera:
         hit= world.hit(ray, interval(self.near, self.far))
 
         if hit!=None:
-
             if(bounce<self.max_bounces):
-                reflect = Ray(hit.point, utils.random_on_hemisphere(hit.normal))
+                reflect = Ray(hit.point, hit.normal+utils.random_unit_sphere_dir())
                 return 0.5*self.ray_color(reflect, world, bounce+1)
             else:
-                return np.array((255, 255, 255))
+                return np.array((0.0, 0.0, 0.0))
+            
         else:
             a = (utils.normalize(ray.direction)[1]+1)*0.5
-            return (1-a)*np.array((255, 255, 255)) + a*np.array((80, 80, 150))
+            return (1-a)*np.array((1.0, 1.0, 1.0)) + a*np.array((0.3, 0.3, 0.8))
 
 
     def render(self, world: HittableList):
@@ -59,25 +60,31 @@ class Camera:
         top_left = np.array([-self.viewport_width/2, self.viewport_height/2, -self.focal_length])
         pixel0 = top_left + 0.5*np.array((du, dv, 0))
 
+        plt.ion()
+
         for v in range(self.image_height):
             for u in range(self.image_width):
 
                 #Every n pixels output progress
                 if(v*self.image_width+u)%100==0 and self.show_progress:
                     print(f"Progress: {v*self.image_width+u}/{self.image_width*self.image_height}\t[{((v*self.image_width+u)/(self.image_width*self.image_height))*100:.2f}]")
+                    plt.imshow(image)
+                    plt.show()
+                    plt.pause(0.0001)
+                    plt.clf()
 
                 pixel_coord = pixel0 + np.array([u*du,v*dv,0])
                 #ray_dir = utils.normalize(pixel_coord-CAMERA_ORIGIN)
+                ray_dir = pixel_coord-self.position #It doesnt matter whether direction is normalized or not
 
                 color = (0,0,0)
 
                 for i in range(self.samples):
                     offset = utils.random_unit_square()
                     offset = np.array((offset[0]*du, offset[1]*dv, 0))
-                    ray_dir = pixel_coord+offset-self.position #It doesnt matter whether direction is normalized or not
-                    ray = Ray(self.position, ray_dir)
+                    ray = Ray(self.position, ray_dir+offset)
                     color += self.ray_color(ray, world)/self.samples
 
-                image[v][u]=color
+                image[v][u]=color*255
 
         return image

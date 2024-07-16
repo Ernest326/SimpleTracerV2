@@ -3,6 +3,7 @@ import utils
 from sphere import Sphere
 from hittable import HittableList
 from camera import Camera
+import matplotlib.pyplot as plt
 
 sphere = Sphere((0,0,-1), 0.5)
 sphere2 = Sphere((0, -10.5, -1), 10)
